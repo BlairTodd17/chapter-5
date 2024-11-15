@@ -1,38 +1,40 @@
 #include <iostream>
-#include <iomanip>
+#include <fstream>
+#include <string>
+#include <algorithm>
+#include <vector>
 using namespace std;
 
 int main() {
-    int startingPopulation;
-    double dailyIncrease;
-    int days;
+    ifstream inputFile("LineUp.txt");
+    if (!inputFile) {
+        cerr << "Error opening file. Make sure LineUp.txt is in the project directory.\n";
+        return 1;
+    }
 
-    
-    do {
-        cout << "Enter the starting number of organisms (must be at least 2): ";
-        cin >> startingPopulation;
-    } while (startingPopulation < 2);
+    vector<string> students;
+    string name;
 
    
-    do {
-        cout << "Enter the average daily population increase (as a percentage, must be non-negative): ";
-        cin >> dailyIncrease;
-    } while (dailyIncrease < 0);
+    while (getline(inputFile, name)) {
+        if (!name.empty()) {
+            students.push_back(name);
+        }
+    }
 
-    do {
-        cout << "Enter the number of days they will multiply (must be at least 1): ";
-        cin >> days;
-    } while (days < 1);
+    inputFile.close();
 
-    cout << fixed << setprecision(2);
-    cout << "Day\tPopulation Size\n";
-    cout << "--------------------------\n";
+    if (students.empty()) {
+        cout << "No students found in file.\n";
+        return 1;
+    }
 
     
-    for (int i = 1; i <= days; ++i) {
-        cout << i << "\t" << startingPopulation << endl;
-        startingPopulation += static_cast<int>(startingPopulation * (dailyIncrease / 100));
-    }
+    sort(students.begin(), students.end());
+
+    cout << "Number of students in the class: " << students.size() << endl;
+    cout << "Student at the front of the line: " << students.front() << endl;
+    cout << "Student at the end of the line: " << students.back() << endl;
 
     return 0;
 }
