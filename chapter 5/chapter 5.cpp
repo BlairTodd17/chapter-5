@@ -1,38 +1,33 @@
 #include <iostream>
-#include <iomanip>
+#include <fstream>
+#include <string>
 using namespace std;
 
 int main() {
-    int startingPopulation;
-    double dailyIncrease;
-    int days;
+    string townName, fileName;
+    cout << "Enter the name of the town: ";
+    getline(cin, townName);
+    cout << "Enter the name of the data file: ";
+    cin >> fileName;
 
-    
-    do {
-        cout << "Enter the starting number of organisms (must be at least 2): ";
-        cin >> startingPopulation;
-    } while (startingPopulation < 2);
-
-   
-    do {
-        cout << "Enter the average daily population increase (as a percentage, must be non-negative): ";
-        cin >> dailyIncrease;
-    } while (dailyIncrease < 0);
-
-    do {
-        cout << "Enter the number of days they will multiply (must be at least 1): ";
-        cin >> days;
-    } while (days < 1);
-
-    cout << fixed << setprecision(2);
-    cout << "Day\tPopulation Size\n";
-    cout << "--------------------------\n";
-
-    
-    for (int i = 1; i <= days; ++i) {
-        cout << i << "\t" << startingPopulation << endl;
-        startingPopulation += static_cast<int>(startingPopulation * (dailyIncrease / 100));
+    ifstream inputFile(fileName);
+    if (!inputFile) {
+        cerr << "Error opening file. Make sure " << fileName << " is in the project directory.\n";
+        return 1;
     }
 
+    cout << townName << " Population Growth\n";
+    cout << "(each * represents 1,000 people)\n";
+
+    int year, population;
+    while (inputFile >> year >> population) {
+        cout << year << " ";
+        for (int i = 0; i < population / 1000; ++i) {
+            cout << "*";
+        }
+        cout << endl;
+    }
+
+    inputFile.close();
     return 0;
 }
